@@ -32,32 +32,28 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
-      - name: Tim du an Android
-        id: locate
-        shell: bash
+      - name: Giai nen ma nguon
         run: |
-          FILE=$(find . -name settings.gradle -type f \
-            -not -path '*/.gradle/*' | head -n 1)
+          unzip -o Lich_Lam_Viec_Thang_GitHub_Build.zip -d source
 
+      - name: Tim du an
+        id: locate
+        run: |
+          FILE=$(find source -name settings.gradle -type f | head -n 1)
           if [ -z "$FILE" ]; then
-            echo "Khong tim thay settings.gradle."
-            echo "Can upload va giai nen ma nguon Android."
-            find . -maxdepth 3 -type f | head -100
+            echo "Khong tim thay settings.gradle sau khi giai nen"
             exit 1
           fi
-
-          DIR=$(dirname "$FILE")
-          echo "project_dir=$DIR" >> "$GITHUB_OUTPUT"
-          echo "Tim thay du an tai: $DIR"
+          echo "dir=$(dirname "$FILE")" >> "$GITHUB_OUTPUT"
 
       - name: Tao APK
         run: |
-          cd "${{ steps.locate.outputs.project_dir }}"
+          cd "${{ steps.locate.outputs.dir }}"
           gradle --no-daemon assembleDebug
 
       - name: Xuat file APK
         uses: actions/upload-artifact@v4
         with:
           name: Lich-Lam-Viec-Thang-APK
-          path: ${{ steps.locate.outputs.project_dir }}/app/build/outputs/apk/debug/app-debug.apk
+          path: ${{ steps.locate.outputs.dir }}/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
