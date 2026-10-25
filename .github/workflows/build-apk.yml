@@ -34,7 +34,7 @@ jobs:
 
       - name: Giai nen ma nguon
         run: |
-          unzip -o Lich_Lam_Viec_Thang_GitHub_Build.zip -d source
+          unzip -o Lich_Lam_Viec_Thang_Android_v2_1.zip -d source
 
       - name: Tim du an
         id: locate
